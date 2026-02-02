@@ -1,0 +1,18 @@
+.front-layout-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.page-content {
+  flex: 1;
+}
+
+.login {
+  max-width: 600px;
+  height: 100vh;
+}
+
+.product-image {
+  height: 600px;
+}

@@ -12,7 +12,6 @@ const API_BASE = import.meta.env.VITE_API_BASE;
 const API_PATH = import.meta.env.VITE_API_PATH;
 
 export default function Cart() {
-  // const [cart, setCart] = useState([]);
   const cart = useSelector((state) => state.cart.cartData);
   const updatingByCartId = useSelector((state) => state.cart.updatingByCartId);
   const dispatch = useDispatch();
@@ -22,17 +21,16 @@ export default function Cart() {
   }, [dispatch]);
 
   const handleUpdateCart = async (e, cartId, productId) => {
-    if (updatingByCartId[cartId]) return;
+    const value = Number(e.target.value);
+    const safeQty = value < 1 ? 1 : value;
+    e.target.value = safeQty;
 
-    try {
-      const value = Number(e.target.value);
-      const safeQty = value < 1 ? 1 : value;
-      e.target.value = safeQty;
-      await dispatch(
-        updateCartItem({ cartId, productId, qty: safeQty }),
-      ).unwrap();
-    } catch (error) {
-      alert(error);
+    const action = await dispatch(
+      updateCartItem({ cartId, productId, qty: safeQty }),
+    );
+
+    if (updateCartItem.rejected.match(action)) {
+      alert(action.payload || action.error.message);
     }
   };
 
